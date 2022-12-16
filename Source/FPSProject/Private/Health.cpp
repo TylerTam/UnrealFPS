@@ -32,13 +32,19 @@ void UHealth::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponen
 	// ...
 }
 
-void UHealth::DamageMe(int p_damageAmount) {
+void UHealth::DamageMe(int p_damageAmount, bool& p_isDead) {
+	if (currentHealth <= 0) {
+		return;
+	}
 	currentHealth -= p_damageAmount;
 	if (currentHealth <= 0) {
 		currentHealth = 0;
-		UE_LOG(LogTemp, Warning, TEXT("I have died"));
+		p_isDead = true;
+		OnIDied.Broadcast();
 	}
+	p_isDead = false;
 }
+
 
 
 

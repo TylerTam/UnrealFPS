@@ -7,7 +7,11 @@
 #include "Health.generated.h"
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+
+//This is required to have any blueprint-able events. (NOTE: Delegates must start with "F" in their name)
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeadEventTrigger);
+
+UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class FPSPROJECT_API UHealth : public UActorComponent
 {
 	GENERATED_BODY()
@@ -25,7 +29,11 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION(BlueprintCallable, Category = "MyCustomCategory")
-	virtual void DamageMe(int p_damageAmount);
+	virtual void DamageMe(int p_damageAmount, bool& p_isDead);
+
+	
+	UPROPERTY(BlueprintAssignable, Category = "Custom")
+		FOnDeadEventTrigger OnIDied;
 
 public:
 	UPROPERTY(EditAnywhere)
